@@ -6,6 +6,7 @@ import { useWeb3Modal } from "@web3modal/wagmi/react";
 import { useAccount, useDisconnect } from "wagmi";
 import truncateEthAddress from "truncate-eth-address";
 import { List, XCircle } from "lucide-react";
+import CreateListing from "./CreateListing";
 
 const Header = () => {
   const { open, close } = useWeb3Modal();
@@ -18,7 +19,7 @@ const Header = () => {
   };
 
   return (
-    <div className="bg-[#E1D3C1] py-4 px-2 flex items-center justify-between">
+    <div className="bg-brownish py-4 px-2 flex items-center justify-between">
       <h2 className=" text-black">NFT MarketPlace</h2>
       <div className="block xsm:hidden">
         <List
@@ -36,7 +37,7 @@ const Header = () => {
         <ul className="flex flex-col sm:flex-row justify-around text-base font-DM text-[#A2A2A2] w-auto">
           <button
             onClick={isDisconnected ? () => open() : () => disconnect()}
-            className="py-3 px-6 border border-white bg-[#E1D3C1] rounded-full text-white hover:cursor-pointer"
+            className="py-3 px-6 border border-white bg-brownish rounded-full text-white hover:cursor-pointer"
           >
             {isDisconnected
               ? "Connect Wallet"
@@ -48,12 +49,12 @@ const Header = () => {
       </div>
 
       <div className="hidden lg:flex items-center">
-        <ul className=" flex flex-col sm:flex-row justify-around text-base font-DM text-black border border-black py-2 px-3 rounded-full shadow-md bg-white w-auto">Create Listing</ul>
+        <CreateListing />
       </div>
 
       <button
         onClick={isDisconnected ? () => open() : () => disconnect()}
-        className="hidden xsm:flex py-3 px-6 border border-black bg-[#E1D3C1] rounded-full text-black hover:cursor-pointer"
+        className="hidden xsm:flex py-3 px-6 border border-black bg-brownish rounded-full text-black hover:cursor-pointer"
       >
         {isDisconnected
           ? "Connect Wallet"

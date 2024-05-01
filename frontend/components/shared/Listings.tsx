@@ -9,7 +9,7 @@ const Listings = () => {
     <div className="mx-2 mt-[50px]">
       <div className="flex justify-between my-2 items-center">
         <h3 className="font-semibold">Browse By Listings</h3>
-        <h4 className="text-[#E99123] text-sm ">View All</h4>
+        <h4 className="text-brownish text-sm ">View All</h4>
       </div>
       <div className="flex min-w-[300px] overflow-x-scroll">
         {listings.map((listing, index) => {
