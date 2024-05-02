@@ -7,6 +7,7 @@ import {
   useAccount,
   useSignMessage,
   useWaitForTransactionReceipt,
+  useReadContract,
   useWriteContract,
   useConnect,
 } from "wagmi";
@@ -29,8 +30,8 @@ import {
 } from "../ui/dialog";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Calendar } from "../ui/calendar";
-import { NFTMarketPlaceABI} from "@/abi/NFTMarketplace"
-import { OurNFTABI} from "@/abi/OurNFT"
+import { NFTMarketPlaceABI } from "@/abi/NFTMarketplace";
+import { OurNFTABI } from "@/abi/OurNFT";
 
 const CreateListing = () => {
   const { connectAsync } = useConnect();
@@ -56,13 +57,12 @@ const CreateListing = () => {
   });
   const { address } = useAccount();
 
+
   const onSubmitListingModal = async (dataparam: any) => {
     // onsumbit ListingModal logic
     if (!address) {
       await connectAsync({ chainId: sepolia.id, connector: injected() });
     }
-
-    const dateTimeStamp = Math.floor(date!.getTime() / 1000); // converst Date() to unix timestamp
 
     const createListing = await writeContractAsync({
       chainId: sepolia.id,
@@ -70,15 +70,16 @@ const CreateListing = () => {
       address: contract.NFTMarketplaceAddress,
       functionName: "listItem",
       args: [
-        toHex(dataparam.ListingName, { size: 32 }),
-        parseEther(`${dataparam.amount}`),
-        address as `0x${string}`,
-        BigInt(dateTimeStamp),
+        dataparam.nftaddress as `0x${string}`,
+        dataparam.tokenId,
+        parseEther(`${dataparam.price}`),
       ],
     });
 
-    // console.log(createListing, status, hash, error);
+    console.log(createListing, status, hash, error);
   };
+
+
 
   return (
     <div className="mx-2">
@@ -102,62 +103,55 @@ const CreateListing = () => {
             >
               <div>
                 <label
-                  htmlFor="ListingName"
+                  htmlFor="NFTAddress"
                   className="text-black font-semibold mb-2 flex justify-start"
                 >
-                  NFT Listing Name
+                  NFT Address
                 </label>
                 <input
-                  {...registerListingModal("ListingName", {
+                  {...registerListingModal("nftaddress", {
                     required: " This is required ",
                   })}
-                  id="ListingName"
+                  id="NFTAddress"
                   type="text"
-                  placeholder="Enter Listing Name"
+                  placeholder="Enter NFT Address"
                   className="flex justify-around border border-gray-300 bg-white rounded-full py-3 px-6  w-full focus:outline-none ring-offset-[#A5A5A533] focus-visible:bg-transparent text-black"
                 />
               </div>
 
               <div>
                 <label
-                  htmlFor="amount"
+                  htmlFor="price"
                   className="text-black font-semibold mb-2 flex justify-start"
                 >
-                  Amount
+                  Price
                 </label>
                 <input
-                  {...registerListingModal("amount", {
+                  {...registerListingModal("price", {
                     required: " This is required ",
                   })}
-                  id="amount"
+                  id="price"
                   type="number"
-                  placeholder="Enter Amount"
+                  placeholder="Enter Price"
                   className="flex justify-around border border-gray-300 bg-white rounded-full py-3 px-6  w-full focus:outline-none ring-offset-[#A5A5A533] focus-visible:bg-transparent text-black"
                 />
               </div>
               <div>
                 <label
-                  htmlFor="ListingDeadline"
+                  htmlFor="tokenId"
                   className="text-black font-semibold mb-2 flex justify-start"
                 >
-                  Listing Deadline
+                  Token ID
                 </label>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <button className="flex justify-center border border-gray-300 bg-white rounded-full py-3 px-6  w-full focus:outline-none ring-offset-[#A5A5A533] focus-visible:bg-transparent text-black">
-                      <CalendarIcon className="mr-2 h-4 w-4" />
-                      {date ? format(date, "PPP") : <span>Pick a date</span>}
-                    </button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0">
-                    <Calendar
-                      mode="single"
-                      selected={date}
-                      onSelect={setDate}
-                      initialFocus
-                    />
-                  </PopoverContent>
-                </Popover>
+                <input
+                  {...registerListingModal("tokenId", {
+                    required: " This is required ",
+                  })}
+                  id="tokenId"
+                  type="text"
+                  placeholder="Enter NFT Address"
+                  className="flex justify-around border border-gray-300 bg-white rounded-full py-3 px-6  w-full focus:outline-none ring-offset-[#A5A5A533] focus-visible:bg-transparent text-black"
+                />
               </div>
               <button
                 disabled={isPending}
