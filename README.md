@@ -30,3 +30,8 @@ In your .env add PRIVATE_KEY ="<walletprivatekey>"
 - Update List
 - Get List
 - Withdraw Proceeds
+
+### Deployed Contracts
+
+OurNFT#OurNFT - 0x7f8F95F24f4c18e97122cb7396BD436d8c99Df18
+NFTMarketPlace#NFTMarketPlace - 0x0AD95DB74A4cfBB8881C63f9B0340d0D8dfC6c02

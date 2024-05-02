@@ -4,12 +4,12 @@ pragma solidity ^0.8.19;
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
 contract OurNFT is ERC721 {
+    string public constant TOKEN_URI = "ipfs://QmTy8w65yBXgyfG2ZBg5TrfB2hPjrDQH3RCQFJGkARStJb";
+    uint256 private s_tokenCounter;
 
     constructor() ERC721("Group10", "G10") {
         s_tokenCounter = 0;
     }
-    string public constant TOKEN_URI = "";
-    uint256 private s_tokenCounter;
 
     event G10Minted(uint256 indexed tokenId);
 
@@ -19,8 +19,13 @@ contract OurNFT is ERC721 {
         s_tokenCounter = s_tokenCounter + 1;
     }
 
-    function tokenURI(uint256 tokenId) public view override returns (string memory) {
-        require(_ownerOf(tokenId) != address(0), "ERC721Metadata: URI query for nonexistent token");
+    function tokenURI(
+        uint256 tokenId
+    ) public view override returns (string memory) {
+        require(
+            _ownerOf(tokenId) != address(0),
+            "ERC721Metadata: URI query for nonexistent token"
+        );
         return TOKEN_URI;
     }
 
