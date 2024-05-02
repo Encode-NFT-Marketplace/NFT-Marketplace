@@ -149,7 +149,7 @@ const CreateListing = () => {
                   })}
                   id="tokenId"
                   type="text"
-                  placeholder="Enter NFT Address"
+                  placeholder="Enter Token ID"
                   className="flex justify-around border border-gray-300 bg-white rounded-full py-3 px-6  w-full focus:outline-none ring-offset-[#A5A5A533] focus-visible:bg-transparent text-black"
                 />
               </div>
