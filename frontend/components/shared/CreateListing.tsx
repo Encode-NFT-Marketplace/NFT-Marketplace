@@ -29,6 +29,8 @@ import {
 } from "../ui/dialog";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Calendar } from "../ui/calendar";
+import { NFTMarketPlaceABI} from "@/abi/NFTMarketplace"
+import { OurNFTABI} from "@/abi/OurNFT"
 
 const CreateListing = () => {
   const { connectAsync } = useConnect();
@@ -62,18 +64,18 @@ const CreateListing = () => {
 
     const dateTimeStamp = Math.floor(date!.getTime() / 1000); // converst Date() to unix timestamp
 
-    // const createListing = await writeContractAsync({
-    //   chainId: sepolia.id,
-    //   abi: ListingABI,
-    //   address: contract.address,
-    //   functionName: "createListing",
-    //   args: [
-    //     toHex(dataparam.ListingName, { size: 32 }),
-    //     parseEther(`${dataparam.amount}`),
-    //     address as `0x${string}`,
-    //     BigInt(dateTimeStamp),
-    //   ],
-    // });
+    const createListing = await writeContractAsync({
+      chainId: sepolia.id,
+      abi: NFTMarketPlaceABI,
+      address: contract.NFTMarketplaceAddress,
+      functionName: "listItem",
+      args: [
+        toHex(dataparam.ListingName, { size: 32 }),
+        parseEther(`${dataparam.amount}`),
+        address as `0x${string}`,
+        BigInt(dateTimeStamp),
+      ],
+    });
 
     // console.log(createListing, status, hash, error);
   };
