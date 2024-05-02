@@ -4,7 +4,6 @@ pragma solidity ^0.8.19;
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 
-
 error PriceNotMet(address nftAddress, uint256 tokenId, uint256 price);
 error ItemNotForSale(address nftAddress, uint256 tokenId);
 error NotListed(address nftAddress, uint256 tokenId);
@@ -42,13 +41,13 @@ contract NFTMarketPlace is ReentrancyGuard {
 
     mapping(address => mapping(uint256 => Listing)) private s_listings;
     mapping(address => uint256) private s_proceeds;
- 
+
     /**checks that the token ID is not currently listed */
     modifier notListed(
         address nftAddress,
         uint256 tokenId,
         address owner
-   ) {
+    ) {
         Listing memory listing = s_listings[nftAddress][tokenId];
         if (listing.price > 0) {
             revert AlreadyListed(nftAddress, tokenId);
@@ -76,8 +75,16 @@ contract NFTMarketPlace is ReentrancyGuard {
         }
         _;
     }
-    
-    function listItem(address _nftAddress, uint256 _tokenId, uint256 _price) external notListed(_nftAddress, _tokenId, msg.sender) isOwner(_nftAddress, _tokenId, msg.sender){
+
+    function listItem(
+        address _nftAddress,
+        uint256 _tokenId,
+        uint256 _price
+    )
+        external
+        notListed(_nftAddress, _tokenId, msg.sender)
+        isOwner(_nftAddress, _tokenId, msg.sender)
+    {
         if (_price <= 0) {
             revert PriceMustBeAboveZero();
         }
@@ -89,7 +96,10 @@ contract NFTMarketPlace is ReentrancyGuard {
         emit ItemListed(msg.sender, _nftAddress, _tokenId, _price);
     }
 
-    function cancelListing(address _nftAddress, uint256 _tokenId)
+    function cancelListing(
+        address _nftAddress,
+        uint256 _tokenId
+    )
         external
         isOwner(_nftAddress, _tokenId, msg.sender)
         isListed(_nftAddress, _tokenId)
@@ -98,12 +108,10 @@ contract NFTMarketPlace is ReentrancyGuard {
         emit ItemCanceled(msg.sender, _nftAddress, _tokenId);
     }
 
-    function buyItem(address _nftAddress, uint256 _tokenId)
-        external
-        payable
-        isListed(_nftAddress, _tokenId)
-        nonReentrant
-    {
+    function buyItem(
+        address _nftAddress,
+        uint256 _tokenId
+    ) external payable isListed(_nftAddress, _tokenId) nonReentrant {
         Listing memory listedItem = s_listings[_nftAddress][_tokenId];
         if (msg.value < listedItem.price) {
             revert PriceNotMet(_nftAddress, _tokenId, listedItem.price);
@@ -111,7 +119,11 @@ contract NFTMarketPlace is ReentrancyGuard {
 
         s_proceeds[listedItem.seller] += msg.value;
         delete (s_listings[_nftAddress][_tokenId]);
-        IERC721(_nftAddress).safeTransferFrom(listedItem.seller, msg.sender, _tokenId);
+        IERC721(_nftAddress).safeTransferFrom(
+            listedItem.seller,
+            msg.sender,
+            _tokenId
+        );
         emit ItemBought(msg.sender, _nftAddress, _tokenId, listedItem.price);
     }
 
@@ -133,7 +145,6 @@ contract NFTMarketPlace is ReentrancyGuard {
         emit ItemListed(msg.sender, _nftAddress, _tokenId, _newPrice);
     }
 
-
     function withdrawProceeds() external {
         uint256 proceeds = s_proceeds[msg.sender];
         if (proceeds <= 0) {
@@ -145,14 +156,14 @@ contract NFTMarketPlace is ReentrancyGuard {
         require(success, "Transfer failed");
     }
 
-
-    function getListing(address nftAddress, uint256 tokenId) external view returns (Listing memory)
-    {
+    function getListing(
+        address nftAddress,
+        uint256 tokenId
+    ) external view returns (Listing memory) {
         return s_listings[nftAddress][tokenId];
     }
 
     function getProceeds(address seller) external view returns (uint256) {
         return s_proceeds[seller];
     }
-    
 }
