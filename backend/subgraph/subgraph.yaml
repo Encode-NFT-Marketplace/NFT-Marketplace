@@ -24,9 +24,9 @@ dataSources:
           file: ./abis/NFTMarketPlace.json
       eventHandlers:
         - event: ItemBought(indexed address,indexed address,indexed uint256,uint256)
-          handler: handleItemBought
+          handler: handleListingPurchased
         - event: ItemCanceled(indexed address,indexed address,indexed uint256)
-          handler: handleItemCanceled
+          handler: handleListingCanceled
         - event: ItemListed(indexed address,indexed address,indexed uint256,uint256)
-          handler: handleItemListed
+          handler: handleListingCreated
       file: ./src/nft-market-place.ts
