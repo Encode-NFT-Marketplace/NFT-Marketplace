@@ -30,3 +30,5 @@ In your .env add PRIVATE_KEY ="<walletprivatekey>"
 - Update List
 - Get List
 - Withdraw Proceeds
+
+

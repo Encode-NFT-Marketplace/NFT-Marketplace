@@ -14,8 +14,10 @@ const config: HardhatUserConfig = {
   },
   networks:{
     arbitrumSepolia: {
-      url: 'https://sepolia-rollup.arbitrum.io/rpc',
-      chainId: 421614,
+      url: 'https://eth-sepolia.g.alchemy.com/v2/oRFlahFLSI_jG91FhzMZwlopvJtKAYRG',
+      //url: 'https://sepolia-rollup.arbitrum.io/rpc',
+      chainId: 11155111,
+      //chainId: 421614,
       accounts: [`${process.env.PRIVATE_KEY}`]
     },
   }
